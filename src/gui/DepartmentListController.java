@@ -15,15 +15,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.Node;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Department;
@@ -49,7 +48,8 @@ public class DepartmentListController implements Initializable{
 	@FXML
 	public void onBtNewAction(ActionEvent event) {
 	   Stage parentStage=Utils.currentStage(event);
-	   createDialogForm("/gui/DeparmentForm.fxml",parentStage);
+	   Department obj=new Department();
+	   createDialogForm(obj,"/gui/DeparmentForm.fxml",parentStage);
 	}
 	public void setDepartmentService(DepartmentService service) {
 		this.service=service;
@@ -78,21 +78,23 @@ public class DepartmentListController implements Initializable{
 		obsList=FXCollections.observableArrayList(listaa);
 		tableViewDeparment.setItems(obsList);
 	}
-	private void createDialogForm(String absoluteName,Stage parentStage) {
+	private void createDialogForm(Department obj,String absoluteName,Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane=loader.load();
 			
+			DeparmentFormController controller=loader.getController();
+			controller.setDeparment(obj);
+			controller.updateFromDate();
+			
+			
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Entre com os dados do departamento");
+			dialogStage.setTitle("Entre com os dados");
 			dialogStage.setScene(new Scene(pane));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
-			
-			
-		
 			
 		}catch(IOException e)
 		{
