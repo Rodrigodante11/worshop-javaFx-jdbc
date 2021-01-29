@@ -38,7 +38,7 @@ public class DepartmentListController implements Initializable{
 	public void onBtNewAction() {
 		System.out.println("teste");
 	}
-	public void setDeparmentService(DepartmentService service) {
+	public void setDepartmentService(DepartmentService service) {
 		this.service=service;
 	}
 	
