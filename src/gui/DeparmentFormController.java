@@ -1,18 +1,31 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import db.DbException;
+import gui.listeners.DataChangeListener;
+import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import model.entities.Department;
+import model.services.DepartmentService;
 
 public class DeparmentFormController implements Initializable{
 	private Department entity;
+	
+	private DepartmentService service;
+	
+	private List<DataChangeListener> dataChangeListers=new ArrayList<>();
 
 	@FXML
 	private TextField txtId;
@@ -32,15 +45,51 @@ public class DeparmentFormController implements Initializable{
 	public void setDeparment(Department entity) {
 		this.entity=entity;
 	}
-	
-	@FXML
-	public void onBtSaveAction(){
-		System.out.println("save");
+	public void setDepartmentService(DepartmentService service) {
+		this.service=service;
+	}
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		dataChangeListers.add(listener);
 	}
 	
+	
+	
 	@FXML
-	public void onBtCancelAction(){
-		System.out.println("cancel");
+	public void onBtSaveAction(ActionEvent event){
+		if(entity==null) {
+			throw new IllegalStateException("Campo vazio");
+		}
+		if(service==null) {
+			throw new IllegalStateException("Service estava nulo");
+		}
+		try {
+			entity=getFormData();
+			service.saveOrUpdate(entity);
+			notifyDataChangeListeners();
+			Utils.currentStage(event).close();
+		}catch(DbException e) {
+			Alerts.showAlert("Erro salvando objeto", null, e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	private void notifyDataChangeListeners() {
+		for(DataChangeListener listener :dataChangeListers)
+		{
+			listener.onDataChanged();
+		}
+		
+	}
+	private Department getFormData() {
+		Department obj=new Department();
+		
+		obj.setId(Utils.tryParseToint(txtId.getText()));
+		obj.setName(txtName.getText());
+		return obj;
+	}
+	@FXML
+	public void onBtCancelAction(ActionEvent event){
+		
+		Utils.currentStage(event).close();
 	}
 	
 	@Override

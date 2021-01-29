@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -28,7 +29,7 @@ import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
-public class DepartmentListController implements Initializable{
+public class DepartmentListController implements Initializable,DataChangeListener{
 	private DepartmentService service;
 	
 	@FXML
@@ -69,10 +70,10 @@ public class DepartmentListController implements Initializable{
 		tableViewDeparment.prefHeightProperty().bind(stage.heightProperty());//acompanhar a janela
 	}
 	
-	public void updateTableView() throws IllegalAccessException {
+	public void updateTableView() {
 		if(service ==null)
 		{
-			throw new IllegalAccessException("Servico esta vazio");
+			throw new IllegalStateException("Servico esta vazio");
 		}
 		List<Department> listaa=service.findAll();
 		obsList=FXCollections.observableArrayList(listaa);
@@ -85,6 +86,8 @@ public class DepartmentListController implements Initializable{
 			
 			DeparmentFormController controller=loader.getController();
 			controller.setDeparment(obj);
+			controller.setDepartmentService(new DepartmentService());
+			controller.subscribeDataChangeListener(this);
 			controller.updateFromDate();
 			
 			
@@ -100,6 +103,11 @@ public class DepartmentListController implements Initializable{
 		{
 			Alerts.showAlert("Io Exception", "Erro carregando a Pagina", e.getMessage(), AlertType.ERROR);
 		}
+	}
+	@Override
+	public void onDataChanged() {
+		
+			updateTableView();
 	}
 
 }

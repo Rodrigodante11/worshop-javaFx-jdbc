@@ -40,7 +40,7 @@ public class MainViewControler implements Initializable{
 			controller.setDepartmentService(new DepartmentService());
 			try {
 				controller.updateTableView();
-			} catch (IllegalAccessException e) {
+			} catch (IllegalStateException e) {
 				
 				e.printStackTrace();
 			}

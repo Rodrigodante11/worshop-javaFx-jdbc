@@ -3,6 +3,7 @@ package gui.util;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+import model.entities.Department;
 
 public class Utils {
 	
@@ -10,6 +11,16 @@ public class Utils {
 		return (Stage) ((Node)event.getSource()).getScene().getWindow();
 		
 	}
+	
+	public static Integer tryParseToint(String str) {
+		try {
+			return Integer.parseInt(str);
+		}catch(NumberFormatException e) {
+			return null;
+		}
+		
+	}
+	
 
 }
 
