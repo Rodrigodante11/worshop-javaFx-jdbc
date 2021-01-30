@@ -21,13 +21,21 @@ public class Utils {
 
 	}
 
-	public static Integer tryParseToint(String str) {
+	public static Integer tryParseToInt(String str) {
 		try {
 			return Integer.parseInt(str);
 		} catch (NumberFormatException e) {
 			return null;
 		}
 
+	}
+
+	public static Double tryParseToDouble(String str) {
+		try {
+			return Double.parseDouble(str);
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
 
 	public static <T> void formatTableColumnDate(TableColumn<T, Date> tableColumn, String format) {
@@ -66,6 +74,7 @@ public class Utils {
 			return cell;
 		});
 	}
+
 	public static void formatDatePicker(DatePicker datePicker, String format) {
 		datePicker.setConverter(new StringConverter<LocalDate>() {
 			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(format);
@@ -93,7 +102,3 @@ public class Utils {
 		});
 	}
 }
-
-	
-
-

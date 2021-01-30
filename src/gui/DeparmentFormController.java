@@ -89,7 +89,7 @@ public class DeparmentFormController implements Initializable{
 		
 		 ValidationException exception=new ValidationException("Erro de validacao");
 		
-		obj.setId(Utils.tryParseToint(txtId.getText()));
+		obj.setId(Utils.tryParseToInt(txtId.getText()));
 		
 		if(txtName.getText()==null || txtName.getText().trim().equals("")) {
 			exception.addError("name", "Campo nao pode fica vazio");
